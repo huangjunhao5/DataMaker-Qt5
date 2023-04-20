@@ -7,8 +7,8 @@
 #include <QMessageBox>
 #include "mainwindow.h"
 #include "ui_MainWindow.h"
-#include "DataMaker.h"
-#include "DataMakerFromText.h"
+#include "../../libs/DataMaker.h"
+#include "../../libs/DataMakerFromText.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :

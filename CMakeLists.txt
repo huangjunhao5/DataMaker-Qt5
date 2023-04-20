@@ -16,7 +16,15 @@ find_package(Qt5 COMPONENTS
         Widgets
         REQUIRED)
 
-add_executable(DataMaker main.cpp mainwindow.cpp mainwindow.h mainwindow.ui DataMaker.h DataMakerFromText.h)
+add_executable(
+        DataMaker
+        main.cpp
+        src/views/MainWindow/mainwindow.cpp
+        src/views/MainWindow/mainwindow.h
+        src/views/MainWindow/mainwindow.ui
+        src/libs/DataMaker.h
+        src/libs/DataMakerFromText.h
+)
 target_link_libraries(DataMaker
         Qt5::Core
         Qt5::Gui
