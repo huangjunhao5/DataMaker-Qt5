@@ -53,7 +53,7 @@ protected:
         inputMakeFilePath = DEFAULT_PATH + "/std/inputMaker.cpp";
     }
     void compileCppFiles(std::string cmd1, std::string path = DEFAULT_PATH + "/std/input.exe"){
-        std::string Command = (cmd1 + " -o " + path);
+        std::string Command = (cmd1 + " -o " + "\"" + path + "\"");
         int code = system(Command.c_str());
         std::clog << "Compile Command: " << Command << std::endl;
         std::clog << "Compile Code: " << code << std::endl;

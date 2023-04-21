@@ -377,7 +377,7 @@ protected:
     }
 
     void compileCpp(std::string cmd, std::string path = DEFAULT_PATH + "/std/a.exe"){
-        int code = system((cmd + " -o " + path).c_str());
+        int code = system((cmd + " -o " + "\"" + path + "\"").c_str());
         std::clog << "Compile Code: " << cmd + " -o " + path << std::endl;
         std::clog << "Compile Code: " << code << std::endl;
 
