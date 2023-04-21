@@ -23,24 +23,25 @@ MainWindow::~MainWindow() {
 
 void MainWindow::MakeData() {
 
-    try{
+    try {
         DataMakerFromSourceText dataMaker;
         auto testNum = ui->lineEdit->text().toInt();
-        if(testNum)dataMaker.setTestNum(testNum);
+        if (testNum)dataMaker.setTestNum(testNum);
         std::string source = ui->source->toPlainText().toStdString();
         dataMaker.setSource(source);
         std::string inputMakeFun = ui->makeFunText->toPlainText().toStdString();
         dataMaker.setInputMakeSource(inputMakeFun);
         dataMaker.run();
-    }catch(std::runtime_error e){
+        QMessageBox::information(this,
+                                 "信息",
+                                 "数据生成成功, 生成位置为\n" + QString::fromStdString( dataMaker.getTestcasePath()));
+    } catch (std::runtime_error e) {
         std::cerr << "ERROR : " << e.what() << std::endl;
         QString info = QString("数据生成失败,错误原因:\n") + e.what();
         QMessageBox::critical(this,
-                                 "错误",
-                                 info);
-        return ;
+                              "错误",
+                              info);
+        return;
     }
-    QMessageBox::information(this,
-        "信息",
-        "数据生成成功");
+
 }

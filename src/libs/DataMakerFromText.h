@@ -59,7 +59,7 @@ protected:
         DataMakerFromEXE::defaultPathSet();
         inputMakeFilePath = DEFAULT_PATH + "/std/inputMaker.cpp";
     }
-    void compileCppFiles(std::string cmd1, std::string path = DEFAULT_PATH + INPUT_MAKE_EXE){
+    virtual void compileCppFiles(std::string cmd1, std::string path = DEFAULT_PATH + INPUT_MAKE_EXE){
         std::string Command = (cmd1 + " -o " + "\"" + path + "\"");
         int code = system(Command.c_str());
         std::clog << "Compile Command: " << Command << std::endl;

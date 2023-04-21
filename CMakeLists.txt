@@ -18,6 +18,7 @@ find_package(Qt5 COMPONENTS
 
 add_executable(
         DataMaker
+#        WIN32
         main.cpp
         src/views/MainWindow/mainwindow.cpp
         src/views/MainWindow/mainwindow.h

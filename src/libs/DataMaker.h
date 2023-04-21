@@ -46,9 +46,19 @@ class DataMaker
 {
 protected:
     typedef void (*MakeTestFun)(int testcase);
-    std::string testcasePath = "";
-    MakeTestFun testMakeFunction = nullptr;
+    std::string testcasePath;
+public:
+    const std::string &getTestcasePath() const {
+        return testcasePath;
+    }
+
+    void setTestcasePath(const std::string &testcasePath) {
+        DataMaker::testcasePath = testcasePath;
+    }
+
 protected:
+
+    MakeTestFun testMakeFunction = nullptr;
     int testNum = 12;
 
     bool ignoreMakeInputDataError = 0;
@@ -130,6 +140,7 @@ public:
         getNowPath();
         testcasePath = DEFAULT_PATH + "/data/";
         testNum = DEFAULT_TEST_CASE;
+        MKDIR(testcasePath.c_str());
     }
     DataMaker() { defaultPathSet(); }
     DataMaker(MakeTestFun makeTestFun) :testMakeFunction(makeTestFun) {defaultPathSet();}
@@ -220,7 +231,7 @@ protected:
     std::string cmd;
 
     //使用标程的EXE文件构造数据
-    void makeOutFileEXE(std::string __INPUT_FILE__, std::string __OUTPUT_FILE__, int __test_num) {
+    virtual void makeOutFileEXE(std::string __INPUT_FILE__, std::string __OUTPUT_FILE__, int __test_num) {
         std::clog << __OUTPUT_FILE__ << " :make begin" << std::endl;
         auto tcmd = cmd;
         //cmd字符串为std程序的全路径
@@ -362,7 +373,7 @@ public:
 
 protected:
 
-    void autoCompilePath() {
+    virtual void autoCompilePath() {
         int gccReturnNum = system("g++ -v");
         int vcReturnNum = system("cl.exe -v");
         if (!gccReturnNum) {
@@ -394,7 +405,7 @@ protected:
         compileCpp(compileCmd);
     }
     // 编译C++代码得到std程序
-    void compileCpp(std::string cmd, std::string outPath = "/std/a.exe"){
+    virtual void compileCpp(std::string cmd, std::string outPath = "/std/a.exe"){
         std::string path = DEFAULT_PATH + outPath;
         // 调用g++，生成可执行文件
         int code = system((cmd + " -o " + "\"" + path + "\"").c_str());
