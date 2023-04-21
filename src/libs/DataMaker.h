@@ -39,6 +39,7 @@
 // 默认的数据生成函数不提供，如果没有传入数据生成函数，将抛出异常
 
 std::string DEFAULT_PATH = "";
+std::string DEFAULT_RUN_PATH = "";
 const int DEFAULT_TEST_CASE = 12;
 
 class DataMaker
@@ -73,11 +74,12 @@ protected:
         std::string fname = ".in";
         if (!__IS_INPUT_FILE)fname = ".out";
         fname = s + fname;
-        return testPath + fname;
+        return "\"" + testPath + fname + "\"";
     }
 
     //使用fun函数构造数据
     virtual void makeInFile(std::string __INPUT_FILE__ ,int __test_num) {
+//        __INPUT_FILE__ = "\"" + __INPUT_FILE__ + "\"";
         std::clog << __INPUT_FILE__ << " :make begin" << std::endl;
         auto it = freopen(__INPUT_FILE__.c_str(), "w", stdout);
         if (it == nullptr) {
@@ -103,8 +105,26 @@ public:
         char runPath[1024] = {0};
         getcwd(runPath, sizeof(runPath));
         DEFAULT_PATH = runPath;
+        DEFAULT_RUN_PATH = DEFAULT_PATH;
+        int len = DEFAULT_RUN_PATH.length();
+        bool flag = 0;
+        for(int i = 0;i < len;i++){
+            if(DEFAULT_RUN_PATH[i] =='\\' || DEFAULT_RUN_PATH[i] == '/'){
+                if(flag){
+                    DEFAULT_RUN_PATH.insert(i, "\"");
+                    i++;
+                    len++;
+                }else{
+                    flag = true;
+                }
+                DEFAULT_RUN_PATH.insert(i + 1, "\"");
+                i++;
+                len++;
+            }
+        }
+        DEFAULT_RUN_PATH.push_back('"');
 //        DEFAULT_PATH += "/data/";
-        MKDIR((DEFAULT_PATH + "/data/").c_str());
+        MKDIR((DEFAULT_RUN_PATH + "/data/").c_str());
     }
     virtual void defaultPathSet() {
         getNowPath();
@@ -252,7 +272,7 @@ public:
     virtual void defaultPathSet() override {
         DataMaker::defaultPathSet();
         MKDIR((DEFAULT_PATH + "/std/").c_str());
-        cmd = DEFAULT_PATH + "/std/a.exe";
+        cmd = DEFAULT_RUN_PATH + "/std/a.exe";
     }
 
     void setstdEXEPath(std::string stdEXEPath) {
@@ -316,8 +336,6 @@ public:
     void setCppVersion(int cppVersion) {
         DataMakerFromCppSourceFile::cppVersion = cppVersion;
     }
-
-public:
     const std::string &getGccCompilePath() const {
         return gccCompilePath;
     }
@@ -338,8 +356,8 @@ public:
         return cppSourcePath;
     }
 
-    void setCppSourcePath(const std::string &cppSourcePah) {
-        DataMakerFromCppSourceFile::cppSourcePath = cppSourcePah;
+    void setCppSourcePath(const std::string &cppSourcePath) {
+        DataMakerFromCppSourceFile::cppSourcePath = "" + cppSourcePath + "";
     }
 
 protected:
@@ -372,23 +390,23 @@ protected:
             compileCmd = vcCompile;
         }
         std::clog << "Use C++ Compile: " << compileCmd << " ,C++ Version : C++ " << cppVersion << std::endl;
-        compileCmd += " " + stdSourceFilePath + " -std=c++" + std::to_string(cppVersion);
+        compileCmd += " \"" + stdSourceFilePath + "\" -std=c++" + std::to_string(cppVersion);
         compileCpp(compileCmd);
     }
-
-    void compileCpp(std::string cmd, std::string path = DEFAULT_PATH + "/std/a.exe"){
+    // 编译C++代码得到std程序
+    void compileCpp(std::string cmd, std::string outPath = "/std/a.exe"){
+        std::string path = DEFAULT_PATH + outPath;
+        // 调用g++，生成可执行文件
         int code = system((cmd + " -o " + "\"" + path + "\"").c_str());
-        std::clog << "Compile Code: " << cmd + " -o " + path << std::endl;
+        std::clog << "Compile Command: " << cmd + " -o " + "\"" + path + "\"" << std::endl;
         std::clog << "Compile Code: " << code << std::endl;
 
         if(code){
-            std::clog << &"Compile Error, Error code = " [ code] << std::endl;
+            // 编译错误
+            std::cerr << &"Compilation Error, Error code = " [ code] << std::endl;
             throw std::runtime_error(" std Source Compilation Error");
         }
-//        char runPath[1024] = {0};
-//        getcwd(runPath, sizeof(runPath));
-//        std::string nowPath = runPath;
-        DataMakerFromEXE::setstdEXEPath(path);
+        DataMakerFromEXE::setstdEXEPath(DEFAULT_RUN_PATH + outPath);
     }
 
     virtual void make(int __test_num) override {

@@ -4,7 +4,14 @@
 #include <fstream>
 #include "DataMaker.h"
 
+#ifdef WIN32
+#define INPUT_MAKE_EXE "\\std\\input.exe"
+//#define system(path) system((std::string("cmd /k ") + std::string(path) + std::string("")).c_str());
+#else
+#define INPUT_MAKE_EXE "/std/input.exe"
+#endif
 
+// 输入模板
 const std::string inputTemplate = R"delimiter(
 // templante
 
@@ -52,7 +59,7 @@ protected:
         DataMakerFromEXE::defaultPathSet();
         inputMakeFilePath = DEFAULT_PATH + "/std/inputMaker.cpp";
     }
-    void compileCppFiles(std::string cmd1, std::string path = DEFAULT_PATH + "/std/input.exe"){
+    void compileCppFiles(std::string cmd1, std::string path = DEFAULT_PATH + INPUT_MAKE_EXE){
         std::string Command = (cmd1 + " -o " + "\"" + path + "\"");
         int code = system(Command.c_str());
         std::clog << "Compile Command: " << Command << std::endl;
@@ -61,7 +68,7 @@ protected:
             std::clog << &"Input Source Compile Error, Error code = " [ code] << std::endl;
             throw std::runtime_error(" Input Source Compilation Error");
         }
-        inputMakeFileEXE = DEFAULT_PATH + "/std/input.exe";
+        inputMakeFileEXE = "" + DEFAULT_RUN_PATH + INPUT_MAKE_EXE + " ";
     }
 
     void make(int __test_num) override {
@@ -72,8 +79,8 @@ protected:
 //        DataMaker::makeInFile(__INPUT_FILE__, __test_num);
         // 重写makeInFile函数，重新实现输入数据构造的方法
         std::clog << __INPUT_FILE__ << " :make begin" << std::endl;
-        std::string Command = inputMakeFileEXE + " " + std::to_string(__test_num) + " > " + __INPUT_FILE__;
-        std::clog << "Run Command:" << Command << std::endl;
+        std::string Command = inputMakeFileEXE + std::to_string(__test_num) + " > " + __INPUT_FILE__;
+        std::clog << "Run Command: " << Command << std::endl;
         int code = system(Command.c_str());
         if(code){
             std::clog << __INPUT_FILE__ << " make error : error code " + std::to_string(code) << __INPUT_FILE__ << std::endl;
@@ -106,7 +113,7 @@ public:
             compileCmd = vcCompile;
         }
         std::clog << "Use C++ Compile: " << compileCmd << " ,C++ Version : C++ " << cppVersion << std::endl;
-        compileCmd += " " + inputMakeFilePath + " -std=c++" + std::to_string(cppVersion);
+        compileCmd += " \"" + inputMakeFilePath + "\" -std=c++" + std::to_string(cppVersion);
         compileCppFiles( compileCmd);
         compileCppFile(cppSourcePath);
         std::clog << std::endl;
