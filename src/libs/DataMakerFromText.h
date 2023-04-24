@@ -27,7 +27,7 @@ using namespace std;
 
 random_device rd;
 mt19937 mt(rd());
-void make(__int32 num);
+void make(int num);
 
 int main(int argc, char *argv[]) {
     int index = atoi(argv[1]);

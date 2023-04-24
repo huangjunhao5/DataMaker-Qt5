@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.24)
 project(DataMaker)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -8,13 +8,15 @@ set(CMAKE_AUTOUIC ON)
 
 # 修改下面的设置为Qt路径
 
-set(CMAKE_PREFIX_PATH "D:/Qt/5.14.2/mingw73_64")
+# set(CMAKE_PREFIX_PATH "/Users/huangjunhao/Qt/6.5.0/macos")
 
-find_package(Qt5 COMPONENTS
+find_package(Qt6 COMPONENTS
         Core
         Gui
         Widgets
         REQUIRED)
+
+
 
 add_executable(
         DataMaker
@@ -27,9 +29,9 @@ add_executable(
         src/libs/DataMakerFromText.h
 )
 target_link_libraries(DataMaker
-        Qt5::Core
-        Qt5::Gui
-        Qt5::Widgets
+        Qt::Core
+        Qt::Gui
+        Qt::Widgets
         )
 
 if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
