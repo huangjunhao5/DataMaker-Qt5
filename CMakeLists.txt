@@ -8,14 +8,20 @@ set(CMAKE_AUTOUIC ON)
 
 # 修改下面的设置为Qt路径
 
-# set(CMAKE_PREFIX_PATH "/Users/huangjunhao/Qt/6.5.0/macos")
+#set(CMAKE_PREFIX_PATH "/Users/huangjunhao/Qt/6.5.0/macos")
+
+
+find_package(Qt5 COMPONENTS
+            Core
+            Gui
+            Widgets
+        QUIET)
 
 find_package(Qt6 COMPONENTS
-        Core
-        Gui
-        Widgets
-        REQUIRED)
-
+            Core
+            Gui
+            Widgets
+        QUIET)
 
 
 add_executable(
@@ -28,11 +34,21 @@ add_executable(
         src/libs/DataMaker.h
         src/libs/DataMakerFromText.h
 )
-target_link_libraries(DataMaker
-        Qt::Core
-        Qt::Gui
-        Qt::Widgets
-        )
+
+if(NOT Qt6_FOUND)
+    target_link_libraries(DataMaker
+            Qt5::Core
+            Qt5::Gui
+            Qt5::Widgets
+            )
+else()
+    target_link_libraries(DataMaker
+            Qt6::Core
+            Qt6::Gui
+            Qt6::Widgets
+            )
+endif()
+
 
 if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
     set(DEBUG_SUFFIX)
