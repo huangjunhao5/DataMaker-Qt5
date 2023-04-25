@@ -6,9 +6,11 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+
+# 如果没有配置Qt环境变量
 # 修改下面的设置为Qt路径
 
-#set(CMAKE_PREFIX_PATH "/Users/huangjunhao/Qt/6.5.0/macos")
+#set(CMAKE_PREFIX_PATH "")
 
 
 find_package(Qt5 COMPONENTS
