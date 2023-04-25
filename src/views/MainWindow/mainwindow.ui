@@ -156,7 +156,6 @@
    </widget>
    <addaction name="menu"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="action">
    <property name="enabled">
     <bool>false</bool>

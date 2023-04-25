@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->make, SIGNAL(clicked()), this, SLOT(MakeData()));
     connect(ui->openCppSource,&QPushButton::clicked,[&](bool){this->copyFile();});
     connect(ui->helpBtn, &QPushButton::clicked, [&](bool){this->openHelp();});
+//    ui->statusbar->showMessage("就绪");
 }
 
 MainWindow::~MainWindow() {
@@ -29,7 +30,7 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::MakeData() {
-
+//    ui->statusbar->showMessage("正在生成数据");
     try {
         DataMakerFromSourceText dataMaker;
         auto testNum = ui->lineEdit->text().toInt();
@@ -42,12 +43,14 @@ void MainWindow::MakeData() {
         QMessageBox::information(this,
                                  "信息",
                                  "数据生成成功, 生成位置为\n" + QString::fromStdString( dataMaker.getTestcasePath()));
+//        ui->statusbar->showMessage("数据生成成功！");
     } catch (std::runtime_error e) {
         std::cerr << "ERROR : " << e.what() << std::endl;
         QString info = QString("数据生成失败,错误原因:\n") + e.what();
         QMessageBox::critical(this,
                               "错误",
                               info);
+//        ui->statusbar->showMessage("生成失败！");
         return;
     }
 
