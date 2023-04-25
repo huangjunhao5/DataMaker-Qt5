@@ -22,6 +22,7 @@ public:
 private slots:
     void MakeData();
     void copyFile();
+    void openHelp();
 private:
     Ui::MainWindow *ui;
 };

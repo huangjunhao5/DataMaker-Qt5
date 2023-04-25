@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->make, SIGNAL(clicked()), this, SLOT(MakeData()));
     connect(ui->openCppSource,&QPushButton::clicked,[&](bool){this->copyFile();});
+    connect(ui->helpBtn, &QPushButton::clicked, [&](bool){this->openHelp();});
 }
 
 MainWindow::~MainWindow() {
@@ -77,36 +78,8 @@ void MainWindow::copyFile() {
     } else {
         QMessageBox::warning(nullptr, "提示", "打开文件失败");
     }
-//    QString filePath = QFileDialog::getOpenFileName(nullptr, "选择文件", QDir::homePath(), "C++ Source Files (*.cpp)");
-//
-//    if (filePath.isEmpty()) {
-//        QMessageBox::information(nullptr, "提示", "未选择文件");
-//        return;
-//    }
-//
-//    // 打开文件资源管理器，选择指定后缀的文件
-//    QDesktopServices::openUrl(QUrl("file:///" + QFileInfo(filePath).path()));
-//
-//    QFile file(filePath);
-//    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-//        QTextStream in(&file);
-//        QString fileContent = in.readAll();
-//        file.close();
-//
-//        // 将文件内容显示在文本框中
-////        QTextEdit *textEdit = new QTextEdit;
-//        ui->source->setPlainText(fileContent);
-//    } else {
-//        QMessageBox::warning(nullptr, "提示", "打开文件失败");
-//    }
-    // 将文件复制到指定路径
-//    QString destPath = QString::fromStdString(getNowRunPath());
-//    QString destFilePath = destPath + QFileInfo(filePath).fileName();
-//    bool success = QFile::copy(filePath, destFilePath);
-//
-//    if (success) {
-//        QMessageBox::information(nullptr, "提示", "文件复制成功");
-//    } else {
-//        QMessageBox::warning(nullptr, "提示", "文件复制失败");
-//    }
+}
+
+void MainWindow::openHelp() {
+    QDesktopServices::openUrl(QUrl("https://github.com/huangjunhao5/DataMaker-Qt5/tree/master",QUrl::TolerantMode));
 }

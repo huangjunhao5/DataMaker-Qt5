@@ -27,8 +27,8 @@ const std::string inputTemplate = R"delimiter(
 
 using namespace std;
 
-random_device rd;
-mt19937 mt(rd());
+//random_device rd;
+//mt19937 mt(rd());
 void make(int num);
 
 int main(int argc, char *argv[]) {
