@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QDesktopServices>
+#include <QTextStream>
 #include "mainwindow.h"
 #include "ui_MainWindow.h"
 #include "../../libs/DataMaker.h"
