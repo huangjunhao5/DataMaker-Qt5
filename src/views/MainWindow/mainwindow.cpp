@@ -1,21 +1,23 @@
 //
-// Created by 18141 on 2023/4/20.
+// Created by 18141 on 2023/4/25.
 //
 
 // You may need to build the project (run Qt uic code generator) to get "ui_MainWindow.h" resolved
+
+#include "mainwindow.h"
+#include "ui_MainWindow.h"
 
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QDesktopServices>
 #include <QTextStream>
-#include "mainwindow.h"
-#include "ui_MainWindow.h"
 #include "../../libs/DataMaker.h"
 #include "../../libs/DataMakerFromText.h"
 
 
+
 MainWindow::MainWindow(QWidget *parent) :
-        QWidget(parent), ui(new Ui::MainWindow) {
+        QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
     connect(ui->make, SIGNAL(clicked()), this, SLOT(MakeData()));
     connect(ui->openCppSource,&QPushButton::clicked,[&](bool){this->copyFile();});

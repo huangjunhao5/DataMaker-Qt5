@@ -33,12 +33,9 @@ add_executable(
         DataMaker
 #        WIN32
         main.cpp
-        src/views/MainWindow/mainwindow.cpp
-        src/views/MainWindow/mainwindow.h
-        src/views/MainWindow/mainwindow.ui
         src/libs/DataMaker.h
         src/libs/DataMakerFromText.h
-)
+        src/views/MainWindow/mainwindow.cpp src/views/MainWindow/mainwindow.h src/views/MainWindow/mainwindow.ui)
 
 if(NOT Qt6_FOUND)
     target_link_libraries(DataMaker

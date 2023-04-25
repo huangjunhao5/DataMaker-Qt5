@@ -1,18 +1,18 @@
 //
-// Created by 18141 on 2023/4/20.
-//0
+// Created by 18141 on 2023/4/25.
+//
 
 #ifndef DATAMAKER_MAINWINDOW_H
 #define DATAMAKER_MAINWINDOW_H
 
-#include <QWidget>
+#include <QMainWindow>
 
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class MainWindow : public QWidget {
+class MainWindow : public QMainWindow {
 Q_OBJECT
 
 public:
