@@ -21,6 +21,7 @@ public:
     ~MainWindow() override;
 private slots:
     void MakeData();
+    void copyFile();
 private:
     Ui::MainWindow *ui;
 };

@@ -11,6 +11,8 @@
 #define INPUT_MAKE_EXE "/std/input.exe"
 #endif
 
+
+
 // 输入模板
 const std::string inputTemplate = R"delimiter(
 // templante
@@ -43,6 +45,16 @@ public:
 protected:
     std::string source;
     std::string inputMakeFilePath;
+public:
+    const std::string &getInputMakeFilePath() const {
+        return inputMakeFilePath;
+    }
+
+    void setInputMakeFilePath(const std::string &inputMakeFilePath) {
+        DataMakerFromSourceText::inputMakeFilePath = inputMakeFilePath;
+    }
+
+protected:
     std::string inputMakeFileEXE;
     std::string inputMakeSource;
 public:
@@ -135,8 +147,9 @@ public:
         DataMakerFromSourceText::source = source;
     }
 
-    DataMakerFromSourceText() : DataMakerFromCppSourceFile() {
+    DataMakerFromSourceText() {
         autoFilePath();
+        DataMakerFromCppSourceFile();
     }
 
     explicit DataMakerFromSourceText(const std::string &source) : source(source) {

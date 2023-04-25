@@ -6,7 +6,6 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
-#include <iostream>
 #ifdef _WIN32
 #include <direct.h>
 #elif __APPLE__ || __linux__
@@ -24,6 +23,49 @@
 #define ACCESS(fileName,accessMode) access(fileName,accessMode)
 #define MKDIR(path) mkdir(path,S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)
 #endif
+
+#ifdef __APPLE__
+#include <CoreFoundation/CoreFoundation.h>
+#include <Carbon/Carbon.h>
+#include <sys/types.h>
+#include <pwd.h>
+#include <Security/Authorization.h>
+#include <Security/AuthorizationTags.h>
+#include <filesystem>
+
+std::string getNowRunPath(){
+
+    std::string res = "";
+    const char* homeDir = getenv("HOME");
+    if (homeDir == nullptr) {
+        homeDir = getpwuid(getuid())->pw_dir;
+    }
+
+    // Get the documents directory.
+    std::string documentsPath = homeDir;
+    documentsPath += "/Documents";
+    res = documentsPath;
+    res += "/testData";
+    MKDIR(res.c_str());
+    std::error_code error;
+    std::filesystem::permissions(res, std::filesystem::perms::owner_write, std::filesystem::perm_options::add, error);
+
+    if (error) {
+        std::cerr << "Error setting permissions: " << error.message() << std::endl;
+        throw std::runtime_error("Error setting permissions: " + error.message());
+    }
+
+
+    return res;
+}
+#else
+std::string getNowRunPath(){
+    char runPath[1024] = {0};
+    getcwd(runPath, sizeof(runPath));
+    return std::string(runPath);
+}
+#endif
+
 
 // 抽象类DataMaker：未实现make函数和run函数，需要重写make函数和run函数
 // make函数编写说明：传入一个参数，为当前制造的数据编号（第几组数据）
@@ -111,11 +153,7 @@ protected:
     virtual void make(int __test_num) = 0;
 public:
     virtual void run() = 0;
-    void getNowPath(){
-        char runPath[1024] = {0};
-        getcwd(runPath, sizeof(runPath));
-        DEFAULT_PATH = runPath;
-        DEFAULT_RUN_PATH = DEFAULT_PATH;
+    void setDEFAULT_RUN_PATH(){
         int len = DEFAULT_RUN_PATH.length();
         bool flag = 0;
         for(int i = 0;i < len;i++){
@@ -133,6 +171,11 @@ public:
             }
         }
         DEFAULT_RUN_PATH.push_back('"');
+    }
+    void getNowPath(){
+        DEFAULT_PATH = getNowRunPath();
+        DEFAULT_RUN_PATH = DEFAULT_PATH;
+        setDEFAULT_RUN_PATH();
 //        DEFAULT_PATH += "/data/";
         MKDIR((DEFAULT_RUN_PATH + "/data/").c_str());
     }
