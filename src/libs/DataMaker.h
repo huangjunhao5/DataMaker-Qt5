@@ -32,7 +32,7 @@
 #include <Security/Authorization.h>
 #include <Security/AuthorizationTags.h>
 #include <filesystem>
-
+// 在macOS系统上，文件生成路径默认位置为文稿文件夹下
 std::string getNowRunPath(){
 
     std::string res = "";
@@ -59,6 +59,7 @@ std::string getNowRunPath(){
     return res;
 }
 #else
+// 在Windows系统上，默认生成路径为当前程序所在路径
 std::string getNowRunPath(){
     char runPath[1024] = {0};
     getcwd(runPath, sizeof(runPath));
@@ -89,7 +90,17 @@ class DataMaker
 protected:
     typedef void (*MakeTestFun)(int testcase);
     std::string testcasePath;
+    std::string inputType = ".in";
+    std::string outputType = ".out";
 public:
+    void setInputType(const std::string &inputType) {
+        DataMaker::inputType = inputType;
+    }
+
+    void setOutputType(const std::string &outputType) {
+        DataMaker::outputType = outputType;
+    }
+
     const std::string &getTestcasePath() const {
         return testcasePath;
     }
@@ -123,8 +134,8 @@ protected:
         for (int i = 1; i <= strlen(ts + 1); i++) {
             s[len - i] = ts[i];
         }
-        std::string fname = ".in";
-        if (!__IS_INPUT_FILE)fname = ".out";
+        std::string fname = inputType;
+        if (!__IS_INPUT_FILE)fname = outputType;
         fname = s + fname;
         return "\"" + testPath + fname + "\"";
     }
@@ -214,13 +225,15 @@ public:
     }
 };
 
-
+// 提示：此类已弃用
 // SpecialJudgeDataMaker：继承自DataMaker类，用于实现生成SpecialJudge题目的数据
 // 此类生成数据时，必须要传入数据生成方法
 // 生成的数据默认存放在程序目录下的/data/文件夹下
 // 如果不忽略数据生成异常，默认在数据生成错误时抛出异常中断程序
 // 如果使用无参构造函数，将使用默认配置
-class SpecialJudgeDataMaker :public DataMaker {
+class
+[[deprecated("This Class is outdated, if you want to use this class,please use DataMakerFromEXE and set skipOutput true.")]]
+SpecialJudgeDataMaker :public DataMaker {
 protected:
     virtual void make(int __test_num) override {
         std::clog << "Test" << __test_num << " :make begin" << std::endl;
@@ -242,6 +255,7 @@ public:
         if (testMakeFunction == nullptr)throw std::runtime_error("NullPtrError:You are not set make function!");
         if (testcasePath == "")throw std::runtime_error("NoPathError:You are not set path!");
         if (testNum < 1)throw std::runtime_error("NoTestNumError:You are not set testnum!");
+        if (inputType == outputType) throw std::runtime_error("OutputTypeError:InputType and outputType are the same!");
         for (int i = 1; i <= testNum; i++) {
             make(i);
         }
@@ -273,6 +287,18 @@ class DataMakerFromEXE :public DataMaker {
 protected:
     std::string cmd;
 
+    bool skipOutput = false;
+public:
+    bool isSkipOutput() const {
+        return skipOutput;
+    }
+
+    void setSkipOutput(bool skipOutput) {
+        DataMakerFromEXE::skipOutput = skipOutput;
+    }
+
+protected:
+
     //使用标程的EXE文件构造数据
     virtual void makeOutFileEXE(std::string __INPUT_FILE__, std::string __OUTPUT_FILE__, int __test_num) {
         std::clog << __OUTPUT_FILE__ << " :make begin" << std::endl;
@@ -303,8 +329,9 @@ protected:
 
         //Special Judge不产生.out文件，将跳过输出数据生成
         //如果不是SpecialJudge，生成.out文件
-        makeOutFileEXE(__INPUT_FILE__, __OUTPUT_FILE__, __test_num);
-
+        if(!skipOutput){
+            makeOutFileEXE(__INPUT_FILE__, __OUTPUT_FILE__, __test_num);
+        }
         //使用std标程重定向到文件输出.out文件
 
         std::clog << "Test" << __test_num << " :make done!" << std::endl;
@@ -316,7 +343,8 @@ public:
         if (testMakeFunction == nullptr)throw std::runtime_error("NullPtrError:You are not set make function!");
         if (testcasePath == "")throw std::runtime_error("NoPathError:You are not set path!");
         if (testNum < 1)throw std::runtime_error("NoTestNumError:You are not set testnum!");
-        if (cmd == "")throw std::runtime_error("NoStdSourceError:You are not set std Source!");
+        if (inputType == outputType) throw std::runtime_error("OutputTypeError:InputType and outputType are the same!");
+        if (cmd == "" && !skipOutput)throw std::runtime_error("NoStdSourceError:You are not set std Source!");
         for (int i = 1; i <= testNum; i++) {
             make(i);
         }
