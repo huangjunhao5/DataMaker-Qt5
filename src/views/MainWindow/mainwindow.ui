@@ -1244,7 +1244,49 @@ QLabel{
 	margin-left:0.2em; 
 	margin-right:0.2em; 
 	line-height:0.2em; 
-}</string>
+}
+
+QLabel{
+	margin-top:0; 
+	margin-bottom:0; 
+	margin-left:0; 
+	margin-right:0; 
+}
+
+QMessageBox {
+    background-color: #1F1F1F;
+    color: white;
+    font-size: 14px;
+    border: 2px solid #1F1F1F;
+}
+
+QMessageBox QLabel {
+    color: white;
+	font-size: 14px;
+}
+
+QMessageBox QPushButton {
+    background-color: #8E8E93;
+    border: 1px solid #8E8E93;
+    border-radius: 3px;
+    color: white;
+    padding: 5px;
+	height: 20px;
+	width: 70px;
+	float: right;
+}
+
+QMessageBox QPushButton:hover {
+    background-color: #007AFF;
+    border: 1px solid #007AFF;
+}
+
+QMessageBox QPushButton:pressed {
+    background-color: #007AFF;
+    border: 1px solid #007AFF;
+}
+
+</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">

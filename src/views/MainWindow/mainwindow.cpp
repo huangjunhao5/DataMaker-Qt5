@@ -61,7 +61,7 @@ void MainWindow::copyFile() {
     QString filePath = QFileDialog::getOpenFileName(nullptr, "选择文件", QDir::homePath(), "C++ Source Files (*.cpp)");
 
     if (filePath.isEmpty()) {
-        QMessageBox::information(nullptr, "提示", "未选择文件");
+        QMessageBox::information(this, "提示", "未选择文件");
         return;
     }
 
@@ -81,7 +81,7 @@ void MainWindow::copyFile() {
         QString fileDirectory = QFileInfo(filePath).absolutePath();
 //        QDesktopServices::openUrl(QUrl::fromLocalFile(fileDirectory));
     } else {
-        QMessageBox::warning(nullptr, "提示", "打开文件失败");
+        QMessageBox::warning(this, "提示", "打开文件失败");
     }
 }
 
