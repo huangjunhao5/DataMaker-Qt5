@@ -16,6 +16,9 @@
 
 
 
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -40,9 +43,13 @@ void MainWindow::MakeData() {
         std::string inputMakeFun = ui->makeFunText->toPlainText().toStdString();
         dataMaker.setInputMakeSource(inputMakeFun);
         dataMaker.run();
-        QMessageBox::information(this,
+        auto res = QMessageBox::information(this,
                                  "信息",
-                                 "数据生成成功, 生成位置为\n" + QString::fromStdString( dataMaker.getTestcasePath()));
+                                 "数据生成成功, 生成位置为\n" + QString::fromStdString( dataMaker.getTestcasePath()),
+                                 QMessageBox::Open | QMessageBox::Ok);
+        if(res == QMessageBox::Open){
+            QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromStdString(dataMaker.getTestcasePath())));
+        }
 //        ui->statusbar->showMessage("数据生成成功！");
     } catch (std::runtime_error e) {
         std::cerr << "ERROR : " << e.what() << std::endl;
@@ -88,3 +95,4 @@ void MainWindow::copyFile() {
 void MainWindow::openHelp() {
     QDesktopServices::openUrl(QUrl("https://github.com/huangjunhao5/DataMaker-Qt5/tree/master",QUrl::TolerantMode));
 }
+#pragma clang diagnostic pop
