@@ -106,6 +106,6 @@ void MainWindow::openHelp() {
 
 void MainWindow::flagChanged() {
     skipOutFlag ^= 1;
-    ui->source->setReadOnly(skipOutFlag);
+    ui->source->setEnabled(!skipOutFlag);
     ui->openCppSource->setEnabled(!skipOutFlag);
 }
