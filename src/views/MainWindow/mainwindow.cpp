@@ -17,14 +17,13 @@
 
 
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
     connect(ui->make, SIGNAL(clicked()), this, SLOT(MakeData()));
     connect(ui->openCppSource,&QPushButton::clicked,[&](bool){this->copyFile();});
-    connect(ui->helpBtn, &QPushButton::clicked, [&](bool){this->openHelp();});
+    connect(ui->helpBtn, &QPushButton::clicked, [&](bool){MainWindow::openHelp();});
 //    ui->statusbar->showMessage("就绪");
 }
 
@@ -51,7 +50,7 @@ void MainWindow::MakeData() {
             QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromStdString(dataMaker.getTestcasePath())));
         }
 //        ui->statusbar->showMessage("数据生成成功！");
-    } catch (std::runtime_error e) {
+    } catch (std::runtime_error& e) {
         std::cerr << "ERROR : " << e.what() << std::endl;
         QString info = QString("数据生成失败,错误原因:\n") + e.what();
         QMessageBox::critical(this,
@@ -85,7 +84,7 @@ void MainWindow::copyFile() {
 //        textEdit->show();
 
         // 打开文件所在目录
-        QString fileDirectory = QFileInfo(filePath).absolutePath();
+//        QString fileDirectory = QFileInfo(filePath).absolutePath();
 //        QDesktopServices::openUrl(QUrl::fromLocalFile(fileDirectory));
     } else {
         QMessageBox::warning(this, "提示", "打开文件失败");
@@ -95,4 +94,3 @@ void MainWindow::copyFile() {
 void MainWindow::openHelp() {
     QDesktopServices::openUrl(QUrl("https://github.com/huangjunhao5/DataMaker-Qt5/tree/master",QUrl::TolerantMode));
 }
-#pragma clang diagnostic pop
