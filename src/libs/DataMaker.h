@@ -16,7 +16,7 @@
 
 #define MAX_PATH_LEN 256
 
-#ifdef WIN32
+#ifdef _WIN32
 #define ACCESS(fileName,accessMode) _access(fileName,accessMode)
 #define MKDIR(path) _mkdir(path)
 #else
