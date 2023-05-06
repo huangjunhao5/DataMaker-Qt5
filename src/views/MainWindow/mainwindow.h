@@ -23,8 +23,10 @@ private slots:
     void MakeData();
     void copyFile();
     static void openHelp();
+    void flagChanged();
 private:
     Ui::MainWindow *ui;
+    bool skipOutFlag = 0;
 };
 
 

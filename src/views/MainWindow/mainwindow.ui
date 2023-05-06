@@ -445,6 +445,7 @@ QProgressBar#progressBar::chunk {
 }
 
 /**********复选框**********/
+/*
 QCheckBox{
         spacing: 5px;
 }
@@ -488,7 +489,7 @@ QCheckBox::indicator:indeterminate:hover {
 QCheckBox::indicator:indeterminate:pressed {
         image: url(:/Black/checkBoxIndeterminatePressed);
 }
-
+*/
 /**********单选框**********/
 QRadioButton{
         spacing: 5px;
@@ -1392,6 +1393,35 @@ QMessageBox QPushButton:pressed {
             </layout>
            </item>
           </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="isSkipOut">
+           <property name="styleSheet">
+            <string notr="true">QCheckBox{
+	color: #efefef;
+}</string>
+           </property>
+           <property name="text">
+            <string>使用Special Judge（不生成输出文件）</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

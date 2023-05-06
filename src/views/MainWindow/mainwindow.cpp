@@ -15,6 +15,9 @@
 #include "../../libs/DataMakerFromText.h"
 
 
+#include<iostream>
+using namespace std;
+
 
 
 
@@ -24,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->make, SIGNAL(clicked()), this, SLOT(MakeData()));
     connect(ui->openCppSource,&QPushButton::clicked,[&](bool){this->copyFile();});
     connect(ui->helpBtn, &QPushButton::clicked, [&](bool){MainWindow::openHelp();});
+    connect(ui->isSkipOut, &QCheckBox::stateChanged, [&](bool){flagChanged();});
 //    ui->statusbar->showMessage("就绪");
 }
 
@@ -37,8 +41,13 @@ void MainWindow::MakeData() {
         DataMakerFromSourceText dataMaker;
         auto testNum = ui->lineEdit->text().toInt();
         if (testNum)dataMaker.setTestNum(testNum);
-        std::string source = ui->source->toPlainText().toStdString();
-        dataMaker.setSource(source);
+        cout << ui->isSkipOut->isChecked() << endl;
+        if(ui->isSkipOut->isChecked()){
+            dataMaker.setSkipOutput(true);
+        }else{
+            std::string source = ui->source->toPlainText().toStdString();
+            dataMaker.setSource(source);
+        }
         std::string inputMakeFun = ui->makeFunText->toPlainText().toStdString();
         dataMaker.setInputMakeSource(inputMakeFun);
         dataMaker.run();
@@ -93,4 +102,10 @@ void MainWindow::copyFile() {
 
 void MainWindow::openHelp() {
     QDesktopServices::openUrl(QUrl("https://github.com/huangjunhao5/DataMaker-Qt5/tree/master",QUrl::TolerantMode));
+}
+
+void MainWindow::flagChanged() {
+    skipOutFlag ^= 1;
+    ui->source->setReadOnly(skipOutFlag);
+    ui->openCppSource->setEnabled(!skipOutFlag);
 }

@@ -71,7 +71,7 @@ protected:
         DataMakerFromEXE::defaultPathSet();
         inputMakeFilePath = DEFAULT_PATH + "/std/inputMaker.cpp";
     }
-    virtual void compileCppFiles(std::string cmd1, std::string path = DEFAULT_PATH + INPUT_MAKE_EXE){
+    virtual void compileInputCppFile(std::string cmd1, std::string path = DEFAULT_PATH + INPUT_MAKE_EXE){
         std::string Command = (cmd1 + " -o " + "\"" + path + "\"");
         int code = system(Command.c_str());
         std::clog << "Compile Command: " << Command << std::endl;
@@ -126,8 +126,9 @@ public:
         }
         std::clog << "Use C++ Compile: " << compileCmd << " ,C++ Version : C++ " << cppVersion << std::endl;
         compileCmd += " \"" + inputMakeFilePath + "\" -std=c++" + std::to_string(cppVersion);
-        compileCppFiles( compileCmd);
-        compileCppFile(cppSourcePath);
+        compileInputCppFile(compileCmd);
+        if(!skipOutput)compileCppFile(cppSourcePath);
+        else std::clog << "Skip std Compile" << std::endl;
         std::clog << std::endl;
         std::clog << std::endl;
         if (inputMakeSource == "")throw std::runtime_error("NullPtrError:You are not set make function!");

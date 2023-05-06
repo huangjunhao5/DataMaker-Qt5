@@ -501,7 +501,8 @@ protected:
     }
 public:
     virtual void run() override{
-        compileCppFile(cppSourcePath);
+        if(!skipOutput)compileCppFile(cppSourcePath);
+        else std::clog << "Skip std Compile" << std::endl;
         std::clog << std::endl;
         std::clog << std::endl;
         DataMakerFromEXE::run();
